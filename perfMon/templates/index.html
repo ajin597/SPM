@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    
+    <title>Document</title>
+</head>
+<body>
+
+    <button class="tablink" onclick="openPage('home',this)" id="defaultOpen">Home</button>
+    <button class="tablink" onclick="openPage('stats',this)" >Stats</button>
+    <button class="tablink" onclick="openPage('menu3',this)" >Menu 3</button>
+    <button class="tablink" onclick="openPage('menu4',this)" >Menu 4</button>
+
+    <div id="home" class="tabcontent">
+    <h3>Home</h3>
+    </div>
+
+    <div id="stats" class="tabcontent">
+        
+        <div>
+            <br><br>
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <lable class="input-group-text">From</lable> <input class="form-control border border-black" type="datetime-local" name="from_date" required>
+                    <lable class="input-group-text">To</lable> <input class="form-control border border-black" type="datetime-local" name="to_date" required>                      
+
+                    <label class="input-group-text"> </label>
+                    <div class="btn-group open form-control border border-black">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><span class="dropdown-text">
+                        Select Option
+                    </span></button>
+                    <ul class="dropdown-menu">
+                        <li><label><input type="checkbox" class="selectall form-check-input mt-0" /><span class="select-text"> Select</span> All</label></li>
+                        <li class="divider"></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='cpu_percent'/> CPU Usage</label></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='ram_percent'/> RAM Usage</label></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='mysql_ram_percent'/> MySQL RAM Usage </label></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='load_average'/> Load Average</label></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='uptime_mysql'/> MySQL Uptime</label></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='uptime_linux'/> Linux Uptime</label></li>
+                        <li><label><input name='parameter' type="checkbox" class="option justone form-check-input mt-0" value='packet_loss'/> Packet Loss</label></li>
+                    </ul>
+                    </div>
+                    <label class="input-group-text"> </label>
+                    <button type="submit" class="btn btn-primary border border-black">Generate</button>
+                </div>
+            </form>
+            <br><br>
+            {% if chart %}
+                {% for key,value in chart.items %}
+                    <div class = "graph-img container border border-5 border-black">
+                        <br>
+                        <!--<h3>{{ key }}</h3>-->
+                        <img class="img-fluid rounded" src="data:image/png;base64,{{ value }}" />
+                    </div>
+                {% endfor %}
+            {% elif message %}
+                    <h2 class="alert alert-danger">{{ message }}</h2>
+            {% endif %}
+        </div>
+        
+    </div>
+    
+    <div id="menu3" class="tabcontent">
+        <h3>3rd Menu</h3>
+    </div>
+
+    <div id="menu4" class="tabcontent">
+        <h3>4th Menu</h3>
+    </div>
+<br><br>
+</body>
+</html>
